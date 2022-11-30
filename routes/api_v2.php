@@ -28,8 +28,3 @@ Route::apiResource('categories', 'Api\CategoryController')
     ->middleware('auth:sanctum');
 
 Route::get('products', 'Api\ProductController@index');
-
-Route::group(['middleware' => 'throttle:2,1'], function (){
-    Route::apiResource('categories', 'Api\CategoryController')
-        ->middleware('auth:sanctum');
-});
