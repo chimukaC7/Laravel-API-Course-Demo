@@ -27,7 +27,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::apiResource('categories', 'Api\CategoryController')
     ->middleware('auth:sanctum');
 
-Route::get('products', 'Api\ProductController@index');
+Route::get('products', [App\Http\Controllers\API\ProductController::class ,'index']);
+//Route::get('products', [App\Http\Controllers\API\V1\ProductController::class ,'index']);
 
 Route::group(['middleware' => 'throttle:2,1'], function (){
     Route::apiResource('categories', 'Api\CategoryController')
