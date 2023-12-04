@@ -58,7 +58,7 @@ class Handler extends ExceptionHandler
 //    }
 
     //Laravel 8 and below:
-    public function render($request, Exception $exception)
+    public function render($request, Throwable $exception)
     {
         if ($request->wantsJson() || $request->is('api/*')) {
             if ($exception instanceof ModelNotFoundException) {
