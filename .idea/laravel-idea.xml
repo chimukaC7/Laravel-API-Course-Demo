@@ -1,6 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="LaravelIdeaMainSettings">
+    <option name="codeGeneration">
+      <LaravelCodeGeneration>
+        <option name="generationBooleanSettings">
+          <map>
+            <entry key="createJsonResource:inTheNewMenu" value="true" />
+            <entry key="createJsonResourceCollection:inTheNewMenu" value="true" />
+            <entry key="createMailable:inTheNewMenu" value="true" />
+            <entry key="createMiddleware:inTheNewMenu" value="true" />
+            <entry key="createNotification:inTheNewMenu" value="true" />
+            <entry key="createObserver:inTheNewMenu" value="true" />
+            <entry key="createPolicy:inTheNewMenu" value="true" />
+            <entry key="createResourceController:inTheNewMenu" value="true" />
+            <entry key="createViewComposer:inTheNewMenu" value="true" />
+          </map>
+        </option>
+        <option name="generationStringSettings">
+          <map>
+            <entry key="createBladeComponent:classSuffix" value="" />
+            <entry key="createController:classSuffix" value="Controller" />
+            <entry key="createFormRequest:classSuffix" value="Request" />
+            <entry key="createHttpException:classSuffix" value="Exception" />
+            <entry key="createJsonResource:classSuffix" value="Resource" />
+            <entry key="createJsonResourceCollection:classSuffix" value="Collection" />
+            <entry key="createMailable:classSuffix" value="Mail" />
+            <entry key="createMiddleware:classSuffix" value="Middleware" />
+            <entry key="createModel:classSuffix" value="" />
+            <entry key="createNotification:classSuffix" value="Notification" />
+            <entry key="createObserver:classSuffix" value="Observer" />
+            <entry key="createPolicy:classSuffix" value="Policy" />
+            <entry key="createResourceController:classSuffix" value="Controller" />
+            <entry key="createRule:classSuffix" value="Rule" />
+            <entry key="createViewComposer:classSuffix" value="ViewComposer" />
+          </map>
+        </option>
+      </LaravelCodeGeneration>
+    </option>
     <option name="frameworkFound" value="true" />
   </component>
 </project>
