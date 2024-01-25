@@ -16,8 +16,8 @@ use Illuminate\Support\Facades\Route;
 
 
 //unprotected routes
-Route::post('auth/register', [App\Http\Controllers\Api\V1\Auth\RegisterController::class]);
-Route::post('auth/login', [App\Http\Controllers\Api\V1\Auth\LoginController::class]);
+Route::post('auth/register', 'Api\V1\Auth\RegisterController');
+Route::post('auth/login', 'Api\V1\Auth\LoginController');
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
@@ -33,13 +33,20 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 //Route::put('categories/{category}', 'Api\CategoryController@update');
 //Route::delete('categories/{category}', 'Api\CategoryController@destroy');
 
-Route::apiResource('categories', 'Api\CategoryController')
-    ->middleware('auth:sanctum');
+Route::apiResource('categories', 'Api\CategoryController')->middleware('auth:sanctum');
 
 //Route::get('products', [App\Http\Controllers\Api\ProductController::class ,'index']);
 Route::get('products', [App\Http\Controllers\Api\V1\ProductController::class ,'index']);
 
 Route::group(['middleware' => 'throttle:2,1'], function (){
-    Route::apiResource('categories', 'Api\CategoryController')
-        ->middleware('auth:sanctum');
+    Route::apiResource('categories', 'Api\CategoryController')->middleware('auth:sanctum');
+});
+
+Route::middleware('auth:sanctum')->group(function () {
+
+    Route::get('profile', [App\Http\Controllers\Api\V1\Auth\ProfileController::class, 'show']);
+    Route::put('profile', [App\Http\Controllers\Api\V1\Auth\ProfileController::class, 'update']);
+    Route::put('password', 'Api\V1\Auth\PasswordUpdateController');
+    Route::post('auth/logout', 'Api\V1\Auth\LogoutController');
+
 });
