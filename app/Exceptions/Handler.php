@@ -6,6 +6,7 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
@@ -33,7 +34,7 @@ class Handler extends ExceptionHandler
     /**
      * Report or log an exception.
      *
-     * @param  \Throwable  $exception
+     * @param \Throwable $exception
      * @return void
      *
      * @throws \Exception
@@ -46,8 +47,8 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Throwable  $exception
+     * @param \Illuminate\Http\Request $request
+     * @param \Throwable $exception
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @throws \Throwable
@@ -57,24 +58,76 @@ class Handler extends ExceptionHandler
 //        return parent::render($request, $exception);
 //    }
 
+    private function isFrontend($request)
+    {
+        //check if request are coming from the web
+        //it is frontend if the request accepts HTML and/or the request is a web request
+        return $request->acceptsHtml() && collect($request->route()->middleware())->contains('web');
+    }
+
     //Laravel 8 and below:
     public function render($request, Throwable $exception)
     {
         if ($request->wantsJson() || $request->is('api/*')) {
             if ($exception instanceof ModelNotFoundException) {
-                return response()->json(['message' => 'Item Not Found'], 404);
+
+                $modelName = strtolower(class_basename($exception->getModel()));
+
+                return response()->json(
+                    [
+                        'status' => false,
+//                        'message' => 'Item Not Found',
+                        'message' => "Does not exists any {$modelName} with the specified identification",
+                    ], 404);
             }
 
             if ($exception instanceof AuthenticationException) {
-                return response()->json(['message' => 'unAuthenticated'], 401);
+                return response()->json(
+                    [
+                        'status' => false,
+                        'message' => 'Unauthenticated'
+                    ], 401);
             }
 
             if ($exception instanceof ValidationException) {
-                return response()->json(['message' => 'UnprocessableEntity', 'errors' => []], 422);
+//                return response()->json(['message' => 'UnprocessableEntity', 'errors' => []], 422);
+
+                $errors = $exception->validator->errors()->getMessages();
+
+                if ($this->isFrontend($request)) {
+                    //if an ajax request or frontend request
+                    return $request->ajax()
+                        ? response()->json(
+                            [
+                                'status' => false,
+                                'message' => "validation error",
+                                'errors' => $errors,
+                            ], 422)
+                        : redirect()->back()->withInput($request->input())->withErrors($errors);//redirect back with the inputs and list of errors
+                }
+
+                return response()->json(
+                    [
+                        'status' => false,
+                        'message' => "validation error",
+                        'errors' => $errors,
+                    ], 422);
             }
 
             if ($exception instanceof NotFoundHttpException) {
-                return response()->json(['message' => 'The requested link does not exist'], 400);
+                return response()->json(
+                    [
+                        'status' => false,
+                        'message' => 'The requested link does not exist'
+                    ], 400);
+            }
+
+            if ($exception instanceof HttpException) {//General HTTP exception
+                return response()->json(
+                    [
+                        'status' => false,
+                        'message' => $exception->getMessage()
+                    ], $exception->getStatusCode());
             }
         }
 

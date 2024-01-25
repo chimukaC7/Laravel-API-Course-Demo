@@ -50,6 +50,7 @@ class CategoryController extends Controller
     public function store(StoreCategoryRequest $request)
     {
         $data = $request->all();
+
         if ($request->hasFile('photo')) {
             $file = $request->file('photo');
             $name = 'categories/' . uniqid() . '.' . $file->extension();
