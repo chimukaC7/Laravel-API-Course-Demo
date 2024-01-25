@@ -49,6 +49,7 @@ class LoginController extends Controller
 //            ]);
                 return response()->json(
                     [
+                        'status' => false,
                         'message' => 'The provided credentials are incorrect'
                     ],
                     401

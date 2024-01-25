@@ -38,10 +38,10 @@ Route::apiResource('categories', 'Api\CategoryController')->middleware('auth:san
 //Route::get('products', [App\Http\Controllers\Api\ProductController::class ,'index']);
 Route::get('products', [App\Http\Controllers\Api\V1\ProductController::class ,'index']);
 
-Route::group(['middleware' => 'throttle:2,1'], function (){
-    Route::apiResource('categories', 'Api\CategoryController')->middleware('auth:sanctum');
-});
-
+//Route::group(['middleware' => 'throttle:2,1'], function (){
+//    Route::apiResource('categories', 'Api\CategoryController')->middleware('auth:sanctum');
+//});
+Route::apiResource('categories', 'Api\CategoryController')->middleware('auth:sanctum');
 Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('profile', [App\Http\Controllers\Api\V1\Auth\ProfileController::class, 'show']);
