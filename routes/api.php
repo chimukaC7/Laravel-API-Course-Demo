@@ -14,9 +14,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
+//unprotected routes
+Route::post('auth/register', [App\Http\Controllers\Api\V1\Auth\RegisterController::class]);
+Route::post('auth/login', [App\Http\Controllers\Api\V1\Auth\LoginController::class]);
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+//Route::get('/user', function (Request $request) {
+////    dd($request);
+//    return $request->user();
+//});
 
 //Route::get('categories', 'Api\CategoryController@index');
 //Route::get('categories/{category}', 'Api\CategoryController@show');
